@@ -26,6 +26,9 @@ dependencies:
   cupertino_icons: ^1.0.2
   firebase_core: ^1.0.3
   firebase_auth: ^1.1.0
+  google_sign_in: ^5.0.2
+  flutter_login_facebook: ^1.0.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -48,6 +51,8 @@ flutter:
   assets:
     - images/google-logo.png
     - images/facebook-logo.png
+    - images/email.png
+    - images/anonymous.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
