@@ -23,7 +23,7 @@ class SignInButton extends CustomRaisedButton {
               ),
               Opacity(
                 opacity: 0.0,
-                child: Image.asset(assetName),
+                child: Image.asset(assetName, scale: 14,),
               ),
             ],
           ),
