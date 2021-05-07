@@ -1,17 +1,15 @@
-import 'dart:io';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:time_tracker_flutter_course/app/sign_in/validators.dart';
 import 'package:time_tracker_flutter_course/common_widgets/form_submit_button.dart';
 import 'package:time_tracker_flutter_course/common_widgets/show_alert_dialog.dart';
+import 'package:time_tracker_flutter_course/common_widgets/show_exception_error.dart';
 import 'package:time_tracker_flutter_course/services/auth.dart';
 
 enum EmailSignInFormType { signIn, register }
 
 class EmailSignInForm extends StatefulWidget with EmailAndPasswordValidators {
-  EmailSignInForm({@required this.auth});
-  final AuthBase auth;
-
   @override
   _EmailSignInFormState createState() => _EmailSignInFormState();
 }
@@ -33,6 +31,17 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
 
   bool _submitted = false;
   bool _isLoading = false;
+
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _passwordController2.dispose();
+
+    _emailFocusNode.dispose();
+    _passwordFocusNode.dispose();
+    _confirmPasswordFocusNode.dispose();
+    super.dispose();
+  }
 
   void _toggleForm() {
     setState(() {
@@ -56,24 +65,27 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
 
     try {
       // await Future.delayed(Duration(seconds: 3));
+      final auth = Provider.of<AuthBase>(context, listen: false);
       if (_formType == EmailSignInFormType.signIn) {
-        await widget.auth.signInWithEmailAndPassword(_email, _password);
+        await auth.signInWithEmailAndPassword(_email, _password);
       } else {
-        if (_confirmPassword == _password) {
-          await widget.auth.createUserWithEmailAndPassword(_email, _password);
+        if (_confirmPassword != _password) {
+          await showAlertDialog(context,
+              title: 'ERROR!',
+              content: 'The password fields don\'t match',
+              actionText: 'OK');
         } else {
-          throw (AssertionError('Both Passwords should be the same'));
+          await auth.createUserWithEmailAndPassword(_email, _password);
         }
-        // await widget.auth.createUserWithEmailAndPassword(_email, _password);
+        // throw (AssertionError('Both Passwords should be the same'));
       }
       Navigator.of(context).pop();
-    } catch (e) {
-      if (Platform.isIOS) {
-        print('Show CupertinoAlertDialog');
-      } else {
-        showAlertDialog(context,
-            title: 'Sign In Failed!', content: e.toString(), actionText: 'OK');
-      }
+    } on FirebaseAuthException catch (e) {
+      showExceptionError(
+        context,
+        title: 'Sign In Failed!',
+        exception: e,
+      );
     } finally {
       setState(() {
         _isLoading = false;
