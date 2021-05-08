@@ -6,7 +6,6 @@ import 'package:time_tracker_flutter_course/app/sign_in/sign_in_page.dart';
 import 'package:time_tracker_flutter_course/services/auth.dart';
 
 class LandingPage extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<AuthBase>(context, listen: false);
@@ -16,7 +15,7 @@ class LandingPage extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.active) {
           final User user = snapshot.data;
           if (user == null) {
-            return SignInPage();
+            return SignInPage.create(context);
           }
           return HomePage();
         }
