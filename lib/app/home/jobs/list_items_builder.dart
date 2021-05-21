@@ -36,10 +36,10 @@ class ListItemsBuilder<T> extends StatelessWidget {
         color: Colors.black45,
       ),
       itemBuilder: (context, index) {
-        if(index==0 || index==items.length+1){
+        if (index == 0 || index == items.length + 1) {
           return Container();
         }
-        return itemBuilder(context, items[index-1]);
+        return itemBuilder(context, items[index - 1]);
       },
     );
   }

@@ -7,35 +7,10 @@ import 'package:time_tracker_flutter_course/app/home/jobs/empty_content.dart';
 import 'package:time_tracker_flutter_course/app/home/jobs/job_list_tile.dart';
 import 'package:time_tracker_flutter_course/app/home/jobs/list_items_builder.dart';
 import 'package:time_tracker_flutter_course/app/home/models/job.dart';
-import 'package:time_tracker_flutter_course/common_widgets/show_alert_dialog.dart';
 import 'package:time_tracker_flutter_course/common_widgets/show_exception_error.dart';
-import 'package:time_tracker_flutter_course/services/auth.dart';
 import 'package:time_tracker_flutter_course/services/databases.dart';
 
 class JobsPage extends StatelessWidget {
-  Future<void> _signOut(BuildContext context) async {
-    try {
-      final auth = Provider.of<AuthBase>(context, listen: false);
-      await auth.signOut();
-    } catch (e) {
-      print(e.toString());
-    }
-  }
-
-  Future<void> _confirmSignOut(BuildContext context) async {
-    final logOutConfirm = await showAlertDialog(
-      context,
-      title: 'Logout?',
-      content: 'Are you sure you want to log out?',
-      actionText: 'Logout',
-      cancelActionText: 'Cancel',
-    );
-
-    if (logOutConfirm == true) {
-      _signOut(context);
-    }
-  }
-
   Future<void> _delete(BuildContext context, Job job) async {
     try {
       final database = Provider.of<Database>(context, listen: false);
@@ -53,22 +28,13 @@ class JobsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Jobs',
+        title: Center(
+          child: Text(
+            'Jobs',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+          ),
         ),
         backgroundColor: Colors.orange,
-        actions: <Widget>[
-          FlatButton(
-            onPressed: () => _confirmSignOut(context),
-            child: Text(
-              'Logout',
-              style: TextStyle(
-                fontSize: 18.0,
-                color: Colors.red,
-              ),
-            ),
-          ),
-        ],
       ),
       body: _buildContents(context),
       backgroundColor: Colors.blueGrey,
