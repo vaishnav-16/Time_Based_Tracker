@@ -25,7 +25,7 @@ class ProfilePic extends StatelessWidget {
         backgroundImage: photoUrl != null ? NetworkImage(photoUrl) : null,
         child: photoUrl == null
             ? Icon(
-                Icons.photo_camera_outlined,
+                Icons.no_photography_outlined,
                 size: radius,
               )
             : null,
